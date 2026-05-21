@@ -704,11 +704,13 @@ with st.sidebar:
 
     # ── Modo archivos CSV ────────────────────────────────────────────────────
     else:
+        # La key dinámica resetea el widget tras cada carga exitosa
+        uploader_key = f"csv_uploads_{st.session_state.get('_uploader_gen', 0)}"
         uploads = st.file_uploader(
             "Seleccionar archivos CSV",
             type=["csv"],
             accept_multiple_files=True,
-            key="csv_uploads",
+            key=uploader_key,
         )
         if uploads:
             for f in uploads:
@@ -721,7 +723,9 @@ with st.sidebar:
 
         if st.button("⟳  Cargar / Recargar", type="primary", use_container_width=True,
                      key="btn_cargar_uploads", disabled=not uploads):
-            st.session_state.pop("dfs", None)   # carga limpia con los archivos seleccionados
+            # Guardar archivos antes de resetear el widget
+            st.session_state["_uploads_pendientes"] = uploads
+            st.session_state.pop("dfs", None)
 
     # ── Carga efectiva de datos ──────────────────────────────────────────────
     if "dfs" not in st.session_state:
@@ -732,9 +736,14 @@ with st.sidebar:
                     bust = st.session_state.get("_cache_bust", 0)
                     st.session_state.dfs = _cargar(ruta, cache_bust=bust)
                 else:
-                    archivos_sel = st.session_state.get("csv_uploads") or []
+                    # Usar archivos guardados antes del reset del widget
+                    archivos_sel = st.session_state.pop("_uploads_pendientes", None) or []
                     if archivos_sel:
                         st.session_state.dfs = _cargar_desde_uploads(archivos_sel)
+                        # Incrementar generación → resetea el file_uploader
+                        st.session_state["_uploader_gen"] = (
+                            st.session_state.get("_uploader_gen", 0) + 1
+                        )
                     else:
                         st.session_state.dfs = {}
             except Exception as exc:
