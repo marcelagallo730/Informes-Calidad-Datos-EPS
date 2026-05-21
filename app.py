@@ -554,14 +554,21 @@ def _pick_folder() -> str:
     return folder or ""
 
 def _cargar_desde_uploads(archivos) -> dict[str, pd.DataFrame]:
-    """Carga DataFrames desde objetos st.file_uploader usando los patrones del loader."""
-    from src.loader import PATRONES_NOMBRE, COLS_NUM, _limpiar_numericos
+    """
+    Carga DataFrames desde objetos st.file_uploader.
+    - Archivos con patrón conocido → clave semántica.
+    - Archivos sin patrón → clave derivada del nombre del archivo.
+    Ningún archivo es ignorado.
+    """
+    from src.loader import PATRONES_NOMBRE, COLS_NUM, _limpiar_numericos, _clave_desde_filename
 
     result: dict[str, pd.DataFrame] = {}
     for f in archivos:
-        clave = next((k for p, k in PATRONES_NOMBRE if p in f.name.lower()), None)
+        # Buscar clave semántica; si no hay patrón, usar nombre del archivo
+        fname_lower = f.name.lower()
+        clave = next((k for p, k in PATRONES_NOMBRE if p in fname_lower), None)
         if clave is None:
-            continue
+            clave = _clave_desde_filename(f.name)
 
         raw = f.read()
         contenido = None
@@ -572,12 +579,13 @@ def _cargar_desde_uploads(archivos) -> dict[str, pd.DataFrame]:
             except UnicodeDecodeError:
                 continue
         if contenido is None:
+            f.seek(0)
             continue
 
         primera = contenido.split("\n")[0]
         sep = ";" if primera.count(";") > primera.count(",") else ","
         df = pd.read_csv(io.StringIO(contenido), sep=sep, dtype=str, low_memory=False)
-        df.columns = df.columns.str.strip()
+        df.columns = df.columns.str.strip().str.lstrip("﻿").str.strip('"')
         df = _limpiar_numericos(df, COLS_NUM.get(clave, []))
         result[clave] = df
         f.seek(0)

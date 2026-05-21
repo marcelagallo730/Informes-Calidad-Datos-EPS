@@ -122,6 +122,19 @@ def _clave_por_nombre(nombre_archivo: str) -> str | None:
     return None
 
 
+def _clave_desde_filename(nombre_archivo: str) -> str:
+    """
+    Genera una clave única a partir del nombre de archivo para CSVs
+    que no coinciden con ningún patrón conocido.
+    Ej: 'NuevaEPS_ConsultarXYZ.csv' → 'nuevaeps_consultarxyz'
+    """
+    stem = Path(nombre_archivo).stem          # sin extensión
+    clave = stem.lower()
+    for ch in (" ", "-", ".", "(", ")"):
+        clave = clave.replace(ch, "_")
+    return clave[:60]                          # máx 60 caracteres
+
+
 def _cargar_archivo(ruta: Path) -> pd.DataFrame | None:
     """Intenta cargar un CSV probando encodings y detectando separador."""
     for enc in ("utf-8", "latin-1", "cp1252"):
@@ -140,19 +153,21 @@ def _cargar_archivo(ruta: Path) -> pd.DataFrame | None:
 
 def cargar_datos(ruta_datos: str) -> dict[str, pd.DataFrame]:
     """
-    Carga todos los CSV de *ruta_datos* que coincidan con los patrones conocidos.
+    Carga TODOS los CSV de *ruta_datos*.
 
-    Estrategia de detección (en orden):
-    1. Nombres exactos definidos en ARCHIVOS.
-    2. Escaneo de TODOS los *.csv de la carpeta con PATRONES_NOMBRE —
-       detecta automáticamente archivos nuevos aunque el nombre varíe.
+    Estrategia (en orden de prioridad):
+    1. Nombres exactos registrados en ARCHIVOS → clave semántica conocida.
+    2. Patrón de nombre coincidente (PATRONES_NOMBRE) → clave semántica conocida.
+    3. Cualquier CSV restante → clave derivada del nombre del archivo.
+       Esto garantiza que NINGÚN archivo sea ignorado.
     """
     ruta_base = Path(ruta_datos)
     dfs: dict[str, pd.DataFrame] = {}
     errores: list[str] = []
 
-    # ── Paso 1: nombres exactos registrados ──────────────────────────────────
     nombres_exactos_lower = {v.lower() for v in ARCHIVOS.values()}
+
+    # ── Paso 1: nombres exactos registrados ──────────────────────────────────
     for clave, archivo in ARCHIVOS.items():
         ruta = ruta_base / archivo
         if not ruta.exists():
@@ -165,19 +180,28 @@ def cargar_datos(ruta_datos: str) -> dict[str, pd.DataFrame]:
         elif clave not in ARCHIVOS_OPCIONALES:
             errores.append(f"No se pudo cargar {archivo}")
 
-    # ── Paso 2: escaneo flexible de la carpeta ────────────────────────────────
-    # Detecta archivos nuevos o con nombres ligeramente distintos a los exactos
+    # ── Pasos 2 y 3: escaneo completo de la carpeta ──────────────────────────
+    # Paso 2 → patrón conocido; Paso 3 → nombre de archivo como clave.
+    # Ningún CSV queda sin cargar.
     for csv_path in sorted(ruta_base.glob("*.[cC][sS][vV]")):
         if csv_path.name.lower() in nombres_exactos_lower:
             continue  # ya procesado en paso 1
+
+        # Intentar patrón conocido primero
         clave = _clave_por_nombre(csv_path.name)
-        if clave is None or clave in dfs:
-            continue  # sin patrón o ya cargado
+
+        # Si no hay patrón → derivar clave desde el nombre del archivo
+        if clave is None:
+            clave = _clave_desde_filename(csv_path.name)
+
+        if clave in dfs:
+            continue  # ya cargado (mismo patrón desde otro archivo)
+
         df = _cargar_archivo(csv_path)
         if df is not None:
             dfs[clave] = df
 
-    # ── Limpieza de columnas numéricas ────────────────────────────────────────
+    # ── Limpieza de columnas numéricas (solo para claves conocidas) ───────────
     for clave, cols in COLS_NUM.items():
         if clave in dfs:
             dfs[clave] = _limpiar_numericos(dfs[clave], cols)
