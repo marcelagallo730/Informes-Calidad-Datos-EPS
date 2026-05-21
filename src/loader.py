@@ -1,7 +1,10 @@
 import pandas as pd
 from pathlib import Path
 
-ARCHIVOS = {
+# ── Archivos con clave semántica conocida ────────────────────────────────────
+# La clave semántica la usa el código de análisis (dimensiones DAMA, costos, etc.)
+# Cualquier CSV que NO esté aquí se carga usando su nombre de archivo como clave.
+ARCHIVOS: dict[str, str] = {
     "liberar_formula":      "SaludTotal_LiberarFormulaV2.csv",
     "direccionamientos":    "SaludTotal_ConsultaDireccionamientosxCedula.csv",
     "consultar_cedula":     "SaludTotal_ConsultarCedula.csv",
@@ -13,61 +16,16 @@ ARCHIVOS = {
     "nueva_eps_liberar":    "NuevaEPS_LiberarPreautorizacion.csv",
 }
 
-# Archivos que no generan error si no están presentes en la carpeta
-ARCHIVOS_OPCIONALES = {
-    "nueva_eps",
-    "capital_salud_aut",
-    "nueva_eps_afiliado",
-    "nueva_eps_ordenes",
-    "nueva_eps_liberar",
+# Tabla inversa: nombre_de_archivo.lower() → clave semántica
+_FILENAME_A_CLAVE: dict[str, str] = {v.lower(): k for k, v in ARCHIVOS.items()}
+
+# Archivos que no generan error si no están presentes
+ARCHIVOS_OPCIONALES: set[str] = {
+    "nueva_eps", "capital_salud_aut",
+    "nueva_eps_afiliado", "nueva_eps_ordenes", "nueva_eps_liberar",
 }
 
-# ── Patrones de nombre (fragmento en minúsculas → clave interna) ─────────────
-# ORDEN IMPORTA: los más específicos deben ir primero.
-# Regla general: patrones con prefijo "nuevaeps" van ANTES de los genéricos
-# ("liberar", "consultar", etc.) para evitar colisiones.
-PATRONES_NOMBRE: list[tuple[str, str]] = [
-
-    # ── NuevaEPS — específicos (ANTES que patrones genéricos) ────────────────
-    ("nuevaeps_liberarpreaut",      "nueva_eps_liberar"),
-    ("nuevaeps_liberar",            "nueva_eps_liberar"),
-    ("liberarpreautorizacion",      "nueva_eps_liberar"),
-    ("nuevaeps_consultarafil",      "nueva_eps_afiliado"),
-    ("consultarafiliado",           "nueva_eps_afiliado"),
-    ("afiliado",                    "nueva_eps_afiliado"),
-    ("nuevaeps_consultarord",       "nueva_eps_ordenes"),
-    ("consultarordenes",            "nueva_eps_ordenes"),
-    ("ordenes",                     "nueva_eps_ordenes"),
-    ("nuevaeps_consultapreaut",     "nueva_eps"),
-    ("nuevaeps_preaut",             "nueva_eps"),
-    ("preautorizacion",             "nueva_eps"),
-    ("preautor",                    "nueva_eps"),
-    ("nuevaeps",                    "nueva_eps"),
-    ("nueva_eps",                   "nueva_eps"),
-
-    # ── Salud Total ──────────────────────────────────────────────────────────
-    ("liberarformulav",             "liberar_formula"),
-    ("liberar_formula",             "liberar_formula"),
-    ("liberarformula",              "liberar_formula"),
-    ("liberar",                     "liberar_formula"),   # genérico — va DESPUÉS de NuevaEPS
-    ("formula",                     "liberar_formula"),
-    ("direccionamientos",           "direccionamientos"),
-    ("direccionamiento",            "direccionamientos"),
-    ("direccion",                   "direccionamientos"),
-    ("consultarcedula",             "consultar_cedula"),
-    ("consultarced",                "consultar_cedula"),
-
-    # ── Capital Salud ────────────────────────────────────────────────────────
-    ("consultarautorizacion",       "capital_salud_aut"),
-    ("consultaraut",                "capital_salud_aut"),
-    ("autorizacion",                "capital_salud_aut"),
-    ("capitalsalud_consultar",      "capital_salud_aut"),
-    ("consultamedicamentos",        "capital_salud"),
-    ("capitalsalud",                "capital_salud"),
-    ("capital",                     "capital_salud"),
-    ("medicamento",                 "capital_salud"),
-]
-
+# Limpieza numérica por clave semántica
 COLS_NUM: dict[str, list[str]] = {
     "liberar_formula":    ["CantidadDireccionada", "CantidadEntregada", "Valor"],
     "direccionamientos":  ["pago_final", "porc_cobertura", "CantidadDosis", "Duracion"],
@@ -76,12 +34,13 @@ COLS_NUM: dict[str, list[str]] = {
     "capital_salud_aut":  ["cantTotAEntregar", "cantTotEntregada", "cuotaModeradora", "copagoAuto"],
     "nueva_eps":          ["edad", "semanasCotizadas", "cantidad"],
     "nueva_eps_afiliado": ["edad", "semanasCotizadas"],
-    "nueva_eps_ordenes":  ["edad", "valor_orden", "cant_presentacion", "cantidad_dispensada",
-                           "dias_tratamiento", "nro_dosis"],
+    "nueva_eps_ordenes":  ["edad", "valor_orden", "cant_presentacion",
+                           "cantidad_dispensada", "dias_tratamiento", "nro_dosis"],
     "nueva_eps_liberar":  ["edad", "semanasCotizadas", "cantidad"],
 }
 
-NOMBRES_DISPLAY = {
+# Nombres legibles por clave semántica
+NOMBRES_DISPLAY: dict[str, str] = {
     "liberar_formula":    "LiberarFormula (ST)",
     "direccionamientos":  "Direccionamientos (ST)",
     "consultar_cedula":   "ConsultarCedula (ST)",
@@ -92,6 +51,20 @@ NOMBRES_DISPLAY = {
     "nueva_eps_ordenes":  "Ordenes (NE)",
     "nueva_eps_liberar":  "LiberarPreaut (NE)",
 }
+
+
+# ── Utilidades ───────────────────────────────────────────────────────────────
+
+def _nombre_a_clave(nombre_archivo: str) -> str:
+    """
+    Devuelve la clave para un archivo CSV.
+    - Si el nombre exacto está registrado en ARCHIVOS → clave semántica.
+    - Si no → nombre del archivo sin extensión, en minúsculas (garantiza unicidad).
+    """
+    return _FILENAME_A_CLAVE.get(
+        nombre_archivo.lower(),
+        Path(nombre_archivo).stem.lower().replace(" ", "_")[:60],
+    )
 
 
 def _detectar_separador(ruta: Path, encoding: str) -> str:
@@ -113,30 +86,7 @@ def _limpiar_numericos(df: pd.DataFrame, columnas: list[str]) -> pd.DataFrame:
     return df
 
 
-def _clave_por_nombre(nombre_archivo: str) -> str | None:
-    """Devuelve la clave interna para un nombre de archivo aplicando PATRONES_NOMBRE."""
-    fname = nombre_archivo.lower().replace(" ", "_")
-    for patron, clave in PATRONES_NOMBRE:
-        if patron in fname:
-            return clave
-    return None
-
-
-def _clave_desde_filename(nombre_archivo: str) -> str:
-    """
-    Genera una clave única a partir del nombre de archivo para CSVs
-    que no coinciden con ningún patrón conocido.
-    Ej: 'NuevaEPS_ConsultarXYZ.csv' → 'nuevaeps_consultarxyz'
-    """
-    stem = Path(nombre_archivo).stem          # sin extensión
-    clave = stem.lower()
-    for ch in (" ", "-", ".", "(", ")"):
-        clave = clave.replace(ch, "_")
-    return clave[:60]                          # máx 60 caracteres
-
-
 def _cargar_archivo(ruta: Path) -> pd.DataFrame | None:
-    """Intenta cargar un CSV probando encodings y detectando separador."""
     for enc in ("utf-8", "latin-1", "cp1252"):
         try:
             sep = _detectar_separador(ruta, enc)
@@ -151,57 +101,37 @@ def _cargar_archivo(ruta: Path) -> pd.DataFrame | None:
     return None
 
 
+# ── Carga principal ──────────────────────────────────────────────────────────
+
 def cargar_datos(ruta_datos: str) -> dict[str, pd.DataFrame]:
     """
-    Carga TODOS los CSV de *ruta_datos*.
+    Carga TODOS los archivos CSV de *ruta_datos* sin excepción.
 
-    Estrategia (en orden de prioridad):
-    1. Nombres exactos registrados en ARCHIVOS → clave semántica conocida.
-    2. Patrón de nombre coincidente (PATRONES_NOMBRE) → clave semántica conocida.
-    3. Cualquier CSV restante → clave derivada del nombre del archivo.
-       Esto garantiza que NINGÚN archivo sea ignorado.
+    Regla de clave (sin patrones, sin ambigüedad):
+      • Nombre exacto registrado en ARCHIVOS  →  clave semántica conocida
+      • Cualquier otro CSV                    →  nombre_del_archivo (sin .csv)
+
+    Cada archivo recibe una clave única derivada de su nombre exacto,
+    por lo que nunca se descartan archivos por colisión de patrones.
     """
     ruta_base = Path(ruta_datos)
     dfs: dict[str, pd.DataFrame] = {}
     errores: list[str] = []
 
-    nombres_exactos_lower = {v.lower() for v in ARCHIVOS.values()}
-
-    # ── Paso 1: nombres exactos registrados ──────────────────────────────────
-    for clave, archivo in ARCHIVOS.items():
-        ruta = ruta_base / archivo
-        if not ruta.exists():
-            if clave not in ARCHIVOS_OPCIONALES:
-                errores.append(f"{archivo} no encontrado en {ruta_base}")
-            continue
-        df = _cargar_archivo(ruta)
-        if df is not None:
-            dfs[clave] = df
-        elif clave not in ARCHIVOS_OPCIONALES:
-            errores.append(f"No se pudo cargar {archivo}")
-
-    # ── Pasos 2 y 3: escaneo completo de la carpeta ──────────────────────────
-    # Paso 2 → patrón conocido; Paso 3 → nombre de archivo como clave.
-    # Ningún CSV queda sin cargar.
     for csv_path in sorted(ruta_base.glob("*.[cC][sS][vV]")):
-        if csv_path.name.lower() in nombres_exactos_lower:
-            continue  # ya procesado en paso 1
-
-        # Intentar patrón conocido primero
-        clave = _clave_por_nombre(csv_path.name)
-
-        # Si no hay patrón → derivar clave desde el nombre del archivo
-        if clave is None:
-            clave = _clave_desde_filename(csv_path.name)
-
-        if clave in dfs:
-            continue  # ya cargado (mismo patrón desde otro archivo)
-
+        clave = _nombre_a_clave(csv_path.name)
         df = _cargar_archivo(csv_path)
         if df is not None:
             dfs[clave] = df
+        else:
+            errores.append(f"No se pudo leer: {csv_path.name}")
 
-    # ── Limpieza de columnas numéricas (solo para claves conocidas) ───────────
+    # Verificar que los archivos obligatorios estén presentes
+    for clave_sem, archivo in ARCHIVOS.items():
+        if clave_sem not in ARCHIVOS_OPCIONALES and clave_sem not in dfs:
+            errores.append(f"{archivo} no encontrado en {ruta_base}")
+
+    # Limpieza numérica para claves semánticas conocidas
     for clave, cols in COLS_NUM.items():
         if clave in dfs:
             dfs[clave] = _limpiar_numericos(dfs[clave], cols)
@@ -210,3 +140,9 @@ def cargar_datos(ruta_datos: str) -> dict[str, pd.DataFrame]:
         raise RuntimeError("\n".join(errores))
 
     return dfs
+
+
+# ── Compatibilidad con código legado ─────────────────────────────────────────
+# Exportamos _clave_desde_filename por si algún módulo lo importa
+def _clave_desde_filename(nombre_archivo: str) -> str:
+    return Path(nombre_archivo).stem.lower().replace(" ", "_")[:60]

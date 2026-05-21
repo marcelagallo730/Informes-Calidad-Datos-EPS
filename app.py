@@ -556,19 +556,15 @@ def _pick_folder() -> str:
 def _cargar_desde_uploads(archivos) -> dict[str, pd.DataFrame]:
     """
     Carga DataFrames desde objetos st.file_uploader.
-    - Archivos con patrón conocido → clave semántica.
-    - Archivos sin patrón → clave derivada del nombre del archivo.
+    Misma regla que cargar_datos: nombre exacto → clave semántica si está
+    registrado, de lo contrario nombre del archivo como clave única.
     Ningún archivo es ignorado.
     """
-    from src.loader import PATRONES_NOMBRE, COLS_NUM, _limpiar_numericos, _clave_desde_filename
+    from src.loader import COLS_NUM, _limpiar_numericos, _nombre_a_clave
 
     result: dict[str, pd.DataFrame] = {}
     for f in archivos:
-        # Buscar clave semántica; si no hay patrón, usar nombre del archivo
-        fname_lower = f.name.lower()
-        clave = next((k for p, k in PATRONES_NOMBRE if p in fname_lower), None)
-        if clave is None:
-            clave = _clave_desde_filename(f.name)
+        clave = _nombre_a_clave(f.name)   # exacto: sin patrones, sin colisiones
 
         raw = f.read()
         contenido = None
