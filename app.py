@@ -24,12 +24,12 @@ from src.calidad_dama.detalle import (
     UMBRAL_OPTIMO, UMBRAL_ACEPTABLE,
 )
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────────────
 # PAGE CONFIG
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Calidad de Datos · DAMA-DMBOK2",
-    page_icon="ðŸ“Š",
+    page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -40,9 +40,9 @@ RUTA_PESOS  = CONFIG_DIR / "pesos_dama.yaml"
 RUTA_REGLAS = CONFIG_DIR / "reglas_validez.yaml"
 RUTA_DATOS_DEFAULT = r"C:\Users\Usuario\Documents\Claude\Análisis Calidad Completo"
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────────────
 # DESIGN TOKENS  (match the HTML reports exactly)
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────────────
 BG       = "#0f1117"
 SURFACE  = "#1a1d27"
 SURFACE2 = "#22263a"
@@ -58,8 +58,8 @@ TEXT2    = "#94a3b8"
 TEXT3    = "#64748b"
 
 DIM_ICONS = {
-    "Completitud": "âœ…", "Unicidad": "ðŸ”‘", "Validez": "âœ”ï¸",
-    "Exactitud": "ðŸŽ¯",  "Oportunidad": "â±ï¸", "Consistencia": "ðŸ”„", "Integridad": "ðŸ”—",
+    "Completitud": "✅", "Unicidad": "🔑", "Validez": "✔️",
+    "Exactitud": "🎯",  "Oportunidad": "⏱️", "Consistencia": "🔄", "Integridad": "🔗",
 }
 DIM_DESCS = {
     "Completitud":  "Registros sin nulos ni vacíos",
@@ -71,12 +71,12 @@ DIM_DESCS = {
     "Integridad":   "Integridad referencial entre fuentes",
 }
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────────────
 # GLOBAL CSS  (dark theme matching the HTML reports)
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────────────
 CSS_GLOBAL = f"""
 <style>
-/* â”€â”€ Tokens â”€â”€ */
+/* ── Tokens ── */
 :root {{
   --bg:{BG}; --surface:{SURFACE}; --surface2:{SURFACE2}; --border:{BORDER};
   --accent:{ACCENT}; --accent2:{ACCENT2};
@@ -85,7 +85,7 @@ CSS_GLOBAL = f"""
   --radius:12px; --radius-sm:7px;
 }}
 
-/* â”€â”€ Streamlit overrides â”€â”€ */
+/* ── Streamlit overrides ── */
 .stApp,[data-testid="stAppViewContainer"],.main {{
   background:{BG} !important;
 }}
@@ -118,7 +118,7 @@ section[data-testid="stSidebar"] .stMultiSelect [data-baseweb="select"] {{
   border:1px solid {BORDER} !important;
 }}
 
-/* â”€â”€ Tabs â”€â”€ */
+/* ── Tabs ── */
 .stTabs [data-baseweb="tab-list"] {{
   background:{SURFACE} !important;
   border:1px solid {BORDER} !important;
@@ -143,7 +143,7 @@ section[data-testid="stSidebar"] .stMultiSelect [data-baseweb="select"] {{
 .stTabs [data-baseweb="tab-border"] {{ display:none !important; }}
 .stTabs [data-baseweb="tab-panel"] {{ padding-top:24px !important; }}
 
-/* â”€â”€ Expanders â”€â”€ */
+/* ── Expanders ── */
 [data-testid="stExpander"] {{
   background:{SURFACE} !important;
   border:1px solid {BORDER} !important;
@@ -157,27 +157,27 @@ section[data-testid="stSidebar"] .stMultiSelect [data-baseweb="select"] {{
 }}
 [data-testid="stExpander"] summary:hover {{ background:rgba(91,124,250,.05) !important; }}
 
-/* â”€â”€ Radio â”€â”€ */
+/* ── Radio ── */
 .stRadio label {{ color:{TEXT2} !important; font-size:13px !important; }}
 .stRadio [data-testid="stRadioLabel"] {{ color:{TEXT} !important; }}
 
-/* â”€â”€ Spinner â”€â”€ */
+/* ── Spinner ── */
 .stSpinner > div {{ border-top-color:{ACCENT} !important; }}
 
-/* â”€â”€ Divider â”€â”€ */
+/* ── Divider ── */
 hr {{ border-color:{BORDER} !important; }}
 
-/* â”€â”€ Scrollbar â”€â”€ */
+/* ── Scrollbar ── */
 ::-webkit-scrollbar {{ width:6px; height:6px; }}
 ::-webkit-scrollbar-track {{ background:{BG}; }}
 ::-webkit-scrollbar-thumb {{ background:{BORDER}; border-radius:3px; }}
 ::-webkit-scrollbar-thumb:hover {{ background:{ACCENT}; }}
 
-/* â”€â”€ Hide Streamlit chrome â”€â”€ */
+/* ── Hide Streamlit chrome ── */
 #MainMenu,footer {{ display:none !important; }}
 [data-testid="stHeader"] {{ visibility:hidden !important; height:0 !important; min-height:0 !important; }}
 
-/* â”€â”€ Sidebar: always keep it in the DOM, override Streamlit's transform collapse â”€â”€ */
+/* ── Sidebar: always keep it in the DOM, override Streamlit's transform collapse ── */
 section[data-testid="stSidebar"] {{
   transform: none !important;
   min-width: 21rem !important;
@@ -195,10 +195,10 @@ section[data-testid="stSidebar"].dq-sb-hidden {{
 /* Kill Streamlit's native toggle (ours replaces it) */
 [data-testid="collapsedControl"] {{ display:none !important; }}
 
-/* â”€â”€ Space so content never hides under the floating toggle â”€â”€ */
+/* ── Space so content never hides under the floating toggle ── */
 .main .block-container {{ padding-top:56px !important; }}
 
-/* â”€â”€ Custom report components â”€â”€ */
+/* ── Custom report components ── */
 .rpt-header {{
   background:linear-gradient(135deg,#1e2240 0%,#12152b 100%);
   border-bottom:1px solid {BORDER};
@@ -320,9 +320,9 @@ tr:hover td {{ background:rgba(91,124,250,.04); }}
 </style>
 """
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────────────
 # HELPERS
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────────────
 
 def _sc(s: float) -> str:
     return GOOD if s >= UMBRAL_OPTIMO else WARN if s >= UMBRAL_ACEPTABLE else BAD
@@ -387,9 +387,9 @@ def _hallazgo(col: str, comp: float, nulos: int, uniques: int, n: int,
     elif comp >= UMBRAL_OPTIMO:
         parts.append(f"{nulos:,} nulos ({100-comp:.1f}%). Revisar fuente de captura.")
     elif comp >= UMBRAL_ACEPTABLE:
-        parts.append(f"ðŸŸ¡ {nulos:,} nulos ({100-comp:.1f}%). Afecta análisis.")
+        parts.append(f"🟡 {nulos:,} nulos ({100-comp:.1f}%). Afecta análisis.")
     else:
-        parts.append(f"ðŸ”´ {100-comp:.1f}% de nulos â€” campo con cobertura insuficiente ({nulos:,} registros).")
+        parts.append(f"🔴 {100-comp:.1f}% de nulos — campo con cobertura insuficiente ({nulos:,} registros).")
 
     if uniques == 1:
         parts.append("Columna constante: un único valor en todo el dataset.")
@@ -402,7 +402,7 @@ def _hallazgo(col: str, comp: float, nulos: int, uniques: int, n: int,
 
     if valid_pct is not None:
         if valid_pct < UMBRAL_ACEPTABLE:
-            parts.append(f"âš ï¸ Validez crítica ({valid_pct:.1f}%) â€” muchos valores fuera del dominio.")
+            parts.append(f"⚠️ Validez crítica ({valid_pct:.1f}%) — muchos valores fuera del dominio.")
         elif valid_pct < UMBRAL_OPTIMO:
             parts.append(f"Validez moderada ({valid_pct:.1f}%).")
 
@@ -461,7 +461,7 @@ def _html_col_table(df: pd.DataFrame, reglas: dict, cols_rel: list[str],
             continue
 
         # Marcador de relevante
-        rel_mark = '<span class="col-rel">â˜…</span> ' if is_rel else ""
+        rel_mark = '<span class="col-rel">★</span> ' if is_rel else ""
         hallazgo = _hallazgo(col, comp, nulos, uniq, n, reglas, valid_pct)
 
         rows += f"""<tr>
@@ -489,20 +489,20 @@ def _html_col_table(df: pd.DataFrame, reglas: dict, cols_rel: list[str],
 
 def _html_issues(recos: list[dict]) -> str:
     if not recos:
-        return f"<p style='color:{GOOD};font-size:13px'>âœ… Sin hallazgos críticos en variables relevantes.</p>"
+        return f"<p style='color:{GOOD};font-size:13px'>✅ Sin hallazgos críticos en variables relevantes.</p>"
     cards = ""
     for r in recos:
         color = BAD if r["nivel"] == "Crítico" else WARN
         cards += f"""<div class="issue-card" style="--issue-color:{color}">
           <div class="issue-tag">{r['dimension']} · {r['nivel']}</div>
           <div class="issue-title" style="color:{color}">{r['variable']}</div>
-          <div class="issue-body">Score: {r['score']:.1f}% â€” {r['acciones'][0] if r['acciones'] else ''}</div>
+          <div class="issue-body">Score: {r['score']:.1f}% — {r['acciones'][0] if r['acciones'] else ''}</div>
         </div>"""
     return f'<div class="issues-grid">{cards}</div>'
 
 def _html_reco_list(recos: list[dict]) -> str:
     if not recos:
-        return f"<p style='color:{GOOD};font-size:13px'>âœ… No se generaron recomendaciones para las variables relevantes.</p>"
+        return f"<p style='color:{GOOD};font-size:13px'>✅ No se generaron recomendaciones para las variables relevantes.</p>"
     items = ""
     idx = 1
     for r in recos:
@@ -516,16 +516,16 @@ def _html_reco_list(recos: list[dict]) -> str:
           <div class="reco-num" style="background:linear-gradient(135deg,{color},{color}bb)">{idx}</div>
           <div class="reco-text">
             <strong>{r['variable']}</strong> ·
-            <span style="color:{color};font-weight:700">{r['dimension']} ({r['nivel']} â€” {r['score']:.1f}%)</span>
+            <span style="color:{color};font-weight:700">{r['dimension']} ({r['nivel']} — {r['score']:.1f}%)</span>
             <ul style="margin:8px 0 0;padding:0;list-style:none">{acciones_html}</ul>
           </div>
         </li>"""
         idx += 1
     return f'<ul class="reco-list">{items}</ul>'
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────────────
 # YAML helpers
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────────────
 
 def _load_yaml(p: Path) -> dict:
     return yaml.safe_load(p.read_text(encoding="utf-8")) or {} if p.exists() else {}
@@ -533,9 +533,9 @@ def _load_yaml(p: Path) -> dict:
 def _save_yaml(p: Path, data: dict):
     p.write_text(yaml.dump(data, allow_unicode=True, default_flow_style=False), encoding="utf-8")
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────────────
 # DATA LOADING
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────────────
 
 @st.cache_data(show_spinner=False)
 def _cargar(ruta: str) -> dict[str, pd.DataFrame]:
@@ -600,21 +600,21 @@ def _cargar_desde_uploads(archivos) -> dict[str, pd.DataFrame]:
 
     return result
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────────────
 # INJECT CSS (once)
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────────────
 st.markdown(CSS_GLOBAL, unsafe_allow_html=True)
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────────────
 # FLOATING SIDEBAR TOGGLE  (JS injected into parent document)
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────────────
 _TOGGLE_JS = """
 <script>
 (function() {
   var D = window.parent.document;
   var OPEN  = true;   // track state locally
 
-  /* â”€â”€ Force sidebar open: override inline transforms Streamlit may have set â”€â”€ */
+  /* ── Force sidebar open: override inline transforms Streamlit may have set ── */
   function forceOpen() {
     var sb = D.querySelector('section[data-testid="stSidebar"]');
     if (!sb) return;
@@ -626,7 +626,7 @@ _TOGGLE_JS = """
     OPEN = true;
   }
 
-  /* â”€â”€ Toggle â”€â”€ */
+  /* ── Toggle ── */
   function toggleSidebar() {
     var sb = D.querySelector('section[data-testid="stSidebar"]');
     if (!sb) return;
@@ -640,7 +640,7 @@ _TOGGLE_JS = """
     }
   }
 
-  /* â”€â”€ Floating â˜° button â”€â”€ */
+  /* ── Floating ☰ button ── */
   function ensureBtn() {
     if (D.getElementById('dq-menu-btn')) return;
     var b = D.createElement('button');
@@ -675,30 +675,30 @@ _TOGGLE_JS = """
 """
 components.html(_TOGGLE_JS, height=0)
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────────────
 # SIDEBAR
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown(
-        f'<div style="font-size:18px;font-weight:800;color:{ACCENT};margin-bottom:2px">ðŸ“Š DataQuality</div>'
+        f'<div style="font-size:18px;font-weight:800;color:{ACCENT};margin-bottom:2px">📊 DataQuality</div>'
         f'<div style="font-size:11px;color:{TEXT3};margin-bottom:16px">DAMA-DMBOK2 · ISO/IEC 25012</div>',
         unsafe_allow_html=True,
     )
 
-    # â”€â”€ Modo de carga â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── Modo de carga ────────────────────────────────────────────────────────
     modo = st.radio(
         "Fuente de datos",
-        ["ðŸ“  Carpeta", "ðŸ“„  Archivos CSV"],
+        ["📁  Carpeta", "📄  Archivos CSV"],
         key="modo_carga",
         horizontal=True,
     )
 
     st.markdown(f'<div style="height:10px"></div>', unsafe_allow_html=True)
 
-    # â”€â”€ Modo carpeta â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    if modo == "ðŸ“  Carpeta":
+    # ── Modo carpeta ─────────────────────────────────────────────────────────
+    if modo == "📁  Carpeta":
         if _TKINTER_OK:
-            if st.button("ðŸ“‚  Buscar carpetaâ€¦", use_container_width=True):
+            if st.button("📂  Buscar carpeta…", use_container_width=True):
                 carpeta = _pick_folder()
                 if carpeta:
                     st.session_state.ruta_seleccionada = carpeta
@@ -709,13 +709,13 @@ with st.sidebar:
         if ruta_input != st.session_state.get("ruta_seleccionada"):
             st.session_state.ruta_seleccionada = ruta_input
 
-        if st.button("âŸ³  Cargar / Recargar", type="primary", use_container_width=True,
+        if st.button("⟳  Cargar / Recargar", type="primary", use_container_width=True,
                      key="btn_cargar_carpeta"):
             st.cache_data.clear()
             st.session_state.pop("dfs", None)
-            # no rerun needed â€” load block below runs immediately
+            # no rerun needed — load block below runs immediately
 
-    # â”€â”€ Modo archivos CSV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── Modo archivos CSV ────────────────────────────────────────────────────
     else:
         uploads = st.file_uploader(
             "Seleccionar archivos CSV",
@@ -724,7 +724,7 @@ with st.sidebar:
             key="csv_uploads",
             help="Selecciona uno o más CSV (LiberarFormula, Direccionamientos, ConsultarCedula, CapitalSalud)",
         )
-        # Detect when a new set of files is uploaded â†’ force reload
+        # Detect when a new set of files is uploaded → force reload
         ids_nuevos = tuple(f.file_id for f in (uploads or []))
         if ids_nuevos != st.session_state.get("_upload_ids"):
             st.session_state._upload_ids = ids_nuevos
@@ -733,21 +733,21 @@ with st.sidebar:
         if uploads:
             for f in uploads:
                 st.markdown(
-                    f'<div style="font-size:11px;color:{TEXT2};padding:2px 0">ðŸ“„ {f.name}</div>',
+                    f'<div style="font-size:11px;color:{TEXT2};padding:2px 0">📄 {f.name}</div>',
                     unsafe_allow_html=True,
                 )
         else:
             st.caption("No hay archivos seleccionados.")
 
-        if st.button("âŸ³  Cargar archivos", type="primary", use_container_width=True,
+        if st.button("⟳  Cargar archivos", type="primary", use_container_width=True,
                      key="btn_cargar_uploads", disabled=not uploads):
             st.session_state.pop("dfs", None)
 
-    # â”€â”€ Carga efectiva de datos â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── Carga efectiva de datos ──────────────────────────────────────────────
     if "dfs" not in st.session_state:
-        with st.spinner("Cargando datosâ€¦"):
+        with st.spinner("Cargando datos…"):
             try:
-                if modo == "ðŸ“  Carpeta":
+                if modo == "📁  Carpeta":
                     ruta = st.session_state.get("ruta_seleccionada", RUTA_DATOS_DEFAULT)
                     st.session_state.dfs = _cargar(ruta)
                 else:
@@ -760,27 +760,27 @@ with st.sidebar:
                 st.error(str(exc))
                 st.session_state.dfs = {}
 
-    # â”€â”€ Estado de carga â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── Estado de carga ──────────────────────────────────────────────────────
     dfs_cargados = st.session_state.get("dfs", {})
     if dfs_cargados:
         n_total = sum(len(d) for d in dfs_cargados.values())
         st.markdown(
             f'<div style="background:{SURFACE};border:1px solid rgba(34,197,94,.3);'
             f'border-radius:8px;padding:10px 14px;margin:10px 0;font-size:12px;color:{GOOD}">'
-            f'âœ“ {len(dfs_cargados)} archivo(s) · {n_total:,} registros</div>',
+            f'✓ {len(dfs_cargados)} archivo(s) · {n_total:,} registros</div>',
             unsafe_allow_html=True,
         )
     elif st.session_state.get("dfs") is not None:
         st.warning("Sin datos. Selecciona una carpeta o archivos CSV válidos.")
 
-    # â”€â”€ Columnas relevantes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── Columnas relevantes ───────────────────────────────────────────────────
     st.markdown(f'<hr style="border-color:{BORDER};margin:16px 0">', unsafe_allow_html=True)
     st.markdown(
         f'<div style="font-size:11px;font-weight:700;text-transform:uppercase;'
         f'letter-spacing:1px;color:{ACCENT};margin-bottom:8px">Columnas Relevantes</div>',
         unsafe_allow_html=True,
     )
-    st.caption("â˜… Determinan el Indicador Relevante (Focalizado).")
+    st.caption("★ Determinan el Indicador Relevante (Focalizado).")
 
     cols_guardadas = _load_yaml(RUTA_COLS)
     columnas_relevantes: dict[str, list[str]] = {}
@@ -796,7 +796,7 @@ with st.sidebar:
                 )
                 columnas_relevantes[clave] = sel
 
-        if st.button("ðŸ’¾  Guardar selección", use_container_width=True):
+        if st.button("💾  Guardar selección", use_container_width=True):
             _save_yaml(RUTA_COLS, columnas_relevantes)
             st.success("Guardado en columnas_relevantes.yaml")
 
@@ -807,15 +807,15 @@ with st.sidebar:
         unsafe_allow_html=True,
     )
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────────────
 # GUARD: need data
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────────────
 dfs = st.session_state.get("dfs", {})
 if not dfs:
     st.markdown(
         f'<div style="background:{SURFACE};border:1px solid {BORDER};border-radius:var(--radius);'
         f'padding:48px;text-align:center;margin-top:40px">'
-        f'<div style="font-size:40px;margin-bottom:16px">ðŸ“‚</div>'
+        f'<div style="font-size:40px;margin-bottom:16px">📂</div>'
         f'<div style="font-size:18px;font-weight:700;color:{TEXT};margin-bottom:8px">'
         f'Sin datos cargados</div>'
         f'<div style="font-size:13px;color:{TEXT2}">'
@@ -830,10 +830,10 @@ pesos_raw = _load_yaml(RUTA_PESOS)
 pesos  = {d: float(pesos_raw.get(d, 1.0)) for d in DIMENSIONES}
 reglas = _load_yaml(RUTA_REGLAS)
 
-# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+# ═══════════════════════════════════════════════════════════════════════════════
 # INDICADORES DAMA
-# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-with st.spinner("Calculando indicadores DAMAâ€¦"):
+# ═══════════════════════════════════════════════════════════════════════════════
+with st.spinner("Calculando indicadores DAMA…"):
     resultado = calcular_indicadores(dfs, columnas_relevantes, reglas, pesos)
 
 total_g = resultado["global"].get("__total__", {})
@@ -844,11 +844,11 @@ n_regs_total  = sum(len(d) for d in dfs.values())
 n_cols_total  = sum(len(d.columns) for d in dfs.values())
 n_rel_total   = sum(len(v) for v in columnas_relevantes.values() if v)
 
-# â”€â”€ Encabezado ejecutivo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ── Encabezado ejecutivo ────────────────────────────────────────────────
 st.markdown(f"""
 <div class="rpt-header">
-  <div class="badge-file">ðŸ“Š Informe de Calidad · {len(dfs)} archivos analizados</div>
-  <div class="rpt-h1">Informe de Calidad de Datos â€” Audifarma / EPS</div>
+  <div class="badge-file">📊 Informe de Calidad · {len(dfs)} archivos analizados</div>
+  <div class="rpt-h1">Informe de Calidad de Datos — Audifarma / EPS</div>
   <div class="rpt-desc">Análisis exhaustivo por columna aplicando las dimensiones de calidad
     de la ISO/IEC 25012, DAMA-DMBOK2 y prácticas vigentes de Gobernanza de Datos.</div>
   <div class="header-meta">
@@ -875,8 +875,8 @@ st.markdown(f"""
   </div>
 </div>""", unsafe_allow_html=True)
 
-# â”€â”€ KPIs globales â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-st.markdown(_html_section_title("ðŸ“Š", "Indicadores Generales del Dataset"), unsafe_allow_html=True)
+# ── KPIs globales ────────────────────────────────────────────────────────
+st.markdown(_html_section_title("📊", "Indicadores Generales del Dataset"), unsafe_allow_html=True)
 st.markdown(_html_kpi_grid([
     ("Indicador General",   f"{sg_total:.1f}%",   "Promedio ponderado DAMA",          _sc(sg_total)),
     ("Indicador Relevante", f"{sf_total:.1f}%",   "Columnas marcadas como relevantes", _sc(sf_total)),
@@ -885,8 +885,8 @@ st.markdown(_html_kpi_grid([
     ("Columnas Relevantes", str(n_rel_total),      "Seleccionadas para análisis",       ACCENT),
 ]), unsafe_allow_html=True)
 
-# â”€â”€ Dimensiones consolidadas â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-st.markdown(_html_section_title("ðŸ”", "Resumen de Dimensiones DAMA â€” Consolidado"), unsafe_allow_html=True)
+# ── Dimensiones consolidadas ─────────────────────────────────────────────
+st.markdown(_html_section_title("🔍", "Resumen de Dimensiones DAMA — Consolidado"), unsafe_allow_html=True)
 st.markdown(_html_dim_grid(total_g, total_f), unsafe_allow_html=True)
 st.markdown(f'<div style="font-size:11px;color:{TEXT3};margin-bottom:8px">'
             f'Barra superior = Indicador General · Barra tenue inferior = Indicador Relevante</div>',
@@ -894,7 +894,7 @@ st.markdown(f'<div style="font-size:11px;color:{TEXT3};margin-bottom:8px">'
 
 st.markdown(f'<hr style="border-color:{BORDER};margin:32px 0 0">', unsafe_allow_html=True)
 
-# â”€â”€ Sección por archivo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ── Sección por archivo ──────────────────────────────────────────────────
 archivos_claves = [k for k in resultado["global"] if not k.startswith("__")]
 
 for idx_a, clave in enumerate(archivos_claves, 1):
@@ -910,12 +910,12 @@ for idx_a, clave in enumerate(archivos_claves, 1):
                       if ((df_arch[c].notna() & (df_arch[c].astype(str).str.strip()!="")).sum()
                           / len(df_arch) * 100) < UMBRAL_ACEPTABLE)
 
-    # â”€â”€ Encabezado del archivo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── Encabezado del archivo ───────────────────────────────────────────
     st.markdown(f"""
     <div class="rpt-header" style="margin-top:28px;border-radius:var(--radius) var(--radius) 0 0">
-      <div class="badge-file">ðŸ“„ Archivo {idx_a} de {len(archivos_claves)}</div>
+      <div class="badge-file">📄 Archivo {idx_a} de {len(archivos_claves)}</div>
       <div class="rpt-h1">{nombre_disp}</div>
-      <div class="rpt-desc">Análisis de calidad aplicando ISO/IEC 25012 y DAMA-DMBOK2 â€”
+      <div class="rpt-desc">Análisis de calidad aplicando ISO/IEC 25012 y DAMA-DMBOK2 —
         {len(df_arch.columns)} columnas · {len(df_arch):,} registros</div>
       <div class="header-meta">
         <div class="meta-item">
@@ -945,8 +945,8 @@ for idx_a, clave in enumerate(archivos_claves, 1):
       </div>
     </div>""", unsafe_allow_html=True)
 
-    # â”€â”€ KPIs del archivo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    st.markdown(_html_section_title("ðŸ“Š", "Indicadores Generales del Archivo"), unsafe_allow_html=True)
+    # ── KPIs del archivo ─────────────────────────────────────────────────
+    st.markdown(_html_section_title("📊", "Indicadores Generales del Archivo"), unsafe_allow_html=True)
     st.markdown(_html_kpi_grid([
         ("Indicador General",    f"{sg_a:.1f}%",             "Promedio ponderado DAMA",    _sc(sg_a)),
         ("Indicador Relevante",  f"{sf_a:.1f}%",             "Variables relevantes",       _sc(sf_a)),
@@ -956,47 +956,47 @@ for idx_a, clave in enumerate(archivos_claves, 1):
         ("Columnas Críticas",    str(n_criticas),            "Completitud < 70%",          BAD),
     ]), unsafe_allow_html=True)
 
-    # â”€â”€ Dimensiones del archivo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    st.markdown(_html_section_title("ðŸ”", "Resumen de Dimensiones DAMA"), unsafe_allow_html=True)
+    # ── Dimensiones del archivo ──────────────────────────────────────────
+    st.markdown(_html_section_title("🔍", "Resumen de Dimensiones DAMA"), unsafe_allow_html=True)
     st.markdown(_html_dim_grid(scores_dim_g, scores_dim_f), unsafe_allow_html=True)
 
-    # â”€â”€ Tabla de columnas â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    st.markdown(_html_section_title("ðŸ“‹", "Análisis Detallado por Columna (ISO 25012 / DAMA-DMBOK2)"),
+    # ── Tabla de columnas ────────────────────────────────────────────────
+    st.markdown(_html_section_title("📋", "Análisis Detallado por Columna (ISO 25012 / DAMA-DMBOK2)"),
                 unsafe_allow_html=True)
 
-    with st.expander(f"Ver tabla de {len(df_arch.columns)} columnas â€” {nombre_disp}", expanded=True):
+    with st.expander(f"Ver tabla de {len(df_arch.columns)} columnas — {nombre_disp}", expanded=True):
         filtro = st.radio(
             "Mostrar",
             ["Todas", "Solo relevantes", "Solo críticas"],
             horizontal=True, key=f"filtro_{clave}",
         )
-        with st.spinner("Generando tablaâ€¦"):
+        with st.spinner("Generando tabla…"):
             tabla_html = _html_col_table(df_arch, reglas_arch, cols_sel, filtro)
         st.markdown(tabla_html, unsafe_allow_html=True)
 
-    # â”€â”€ Hallazgos â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    st.markdown(_html_section_title("âš ï¸", "Hallazgos de Calidad â€” Variables Relevantes"),
+    # ── Hallazgos ────────────────────────────────────────────────────────
+    st.markdown(_html_section_title("⚠️", "Hallazgos de Calidad — Variables Relevantes"),
                 unsafe_allow_html=True)
 
-    with st.expander(f"Ver hallazgos â€” {nombre_disp}", expanded=False):
-        with st.spinner("Calculando hallazgosâ€¦"):
+    with st.expander(f"Ver hallazgos — {nombre_disp}", expanded=False):
+        with st.spinner("Calculando hallazgos…"):
             df_det = detalle_por_columna(df_arch, reglas_arch, cols_sel)
             recos  = generar_recomendaciones(df_det, scores_dim_g)
         st.markdown(_html_issues(recos), unsafe_allow_html=True)
 
-    # â”€â”€ Recomendaciones â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    st.markdown(_html_section_title("ðŸ’¡", "Recomendaciones DAMA â€” ISO/IEC 25012"),
+    # ── Recomendaciones ───────────────────────────────────────────────────
+    st.markdown(_html_section_title("💡", "Recomendaciones DAMA — ISO/IEC 25012"),
                 unsafe_allow_html=True)
 
-    with st.expander(f"Ver recomendaciones ({len(recos) if 'recos' in dir() else 0}) â€” {nombre_disp}",
+    with st.expander(f"Ver recomendaciones ({len(recos) if 'recos' in dir() else 0}) — {nombre_disp}",
                      expanded=False):
         if "recos" not in dir() or not recos:
-            with st.spinner("Generando recomendacionesâ€¦"):
+            with st.spinner("Generando recomendaciones…"):
                 df_det = detalle_por_columna(df_arch, reglas_arch, cols_sel)
                 recos  = generar_recomendaciones(df_det, scores_dim_g)
         st.markdown(_html_reco_list(recos), unsafe_allow_html=True)
 
-    # â”€â”€ Footer del archivo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── Footer del archivo ────────────────────────────────────────────────
     st.markdown(f"""
     <div class="rpt-footer">
       <div>
@@ -1009,7 +1009,7 @@ for idx_a, clave in enumerate(archivos_claves, 1):
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-# â”€â”€ Footer global â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ── Footer global ─────────────────────────────────────────────────────────────
 st.markdown(f"""
 <div class="rpt-footer" style="margin-top:40px;border-radius:var(--radius)">
   <div>
