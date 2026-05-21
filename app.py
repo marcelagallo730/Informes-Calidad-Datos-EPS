@@ -890,13 +890,6 @@ st.markdown(_html_kpi_grid([
     ("Columnas Relevantes", str(n_rel_total),      "Seleccionadas para análisis",       ACCENT),
 ]), unsafe_allow_html=True)
 
-# ── Dimensiones consolidadas ─────────────────────────────────────────────
-st.markdown(_html_section_title("🔍", "Resumen de Dimensiones DAMA — Consolidado"), unsafe_allow_html=True)
-st.markdown(_html_dim_grid(total_g, total_f), unsafe_allow_html=True)
-st.markdown(f'<div style="font-size:11px;color:{TEXT3};margin-bottom:8px">'
-            f'Barra superior = Indicador General · Barra tenue inferior = Indicador Relevante</div>',
-            unsafe_allow_html=True)
-
 st.markdown(f'<hr style="border-color:{BORDER};margin:32px 0 0">', unsafe_allow_html=True)
 
 # ── Sección por archivo ──────────────────────────────────────────────────
@@ -960,10 +953,6 @@ for idx_a, clave in enumerate(archivos_claves, 1):
         ("Columnas Relevantes",  str(len(cols_sel)),         "Marcadas para análisis",     ACCENT),
         ("Columnas Críticas",    str(n_criticas),            "Completitud < 70%",          BAD),
     ]), unsafe_allow_html=True)
-
-    # ── Dimensiones del archivo ──────────────────────────────────────────
-    st.markdown(_html_section_title("🔍", "Resumen de Dimensiones DAMA"), unsafe_allow_html=True)
-    st.markdown(_html_dim_grid(scores_dim_g, scores_dim_f), unsafe_allow_html=True)
 
     # ── Tabla de columnas ────────────────────────────────────────────────
     st.markdown(_html_section_title("📋", "Análisis Detallado por Columna (ISO 25012 / DAMA-DMBOK2)"),
