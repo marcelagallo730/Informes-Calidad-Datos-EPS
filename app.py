@@ -951,7 +951,6 @@ for idx_a, clave in enumerate(archivos_claves, 1):
         ("Total Registros",      f"{len(df_arch):,}",        "Filas en el archivo",        INFO),
         ("Columnas Totales",     str(len(df_arch.columns)),  "Variables analizadas",        INFO),
         ("Columnas Relevantes",  str(len(cols_sel)),         "Marcadas para análisis",     ACCENT),
-        ("Columnas Críticas",    str(n_criticas),            "Completitud < 70%",          BAD),
     ]), unsafe_allow_html=True)
 
     # ── Tabla de columnas ────────────────────────────────────────────────
