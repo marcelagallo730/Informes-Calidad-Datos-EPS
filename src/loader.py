@@ -12,12 +12,41 @@ ARCHIVOS = {
 # Archivos que no generan error si no están presentes en la carpeta
 ARCHIVOS_OPCIONALES = {"nueva_eps"}
 
+# Patrones de nombre (fragmento en minúsculas → clave interna).
+# Se aplican tanto al escaneo de carpeta como al modo upload.
+PATRONES_NOMBRE: list[tuple[str, str]] = [
+    ("liberarformula",      "liberar_formula"),
+    ("liberar_formula",     "liberar_formula"),
+    ("liberar",             "liberar_formula"),
+    ("formula",             "liberar_formula"),
+    ("direccionamientos",   "direccionamientos"),
+    ("direccion",           "direccionamientos"),
+    ("consultarced",        "consultar_cedula"),
+    ("consultar",           "consultar_cedula"),
+    ("cedula",              "consultar_cedula"),
+    ("capitalsalud",        "capital_salud"),
+    ("capital",             "capital_salud"),
+    ("medicamento",         "capital_salud"),
+    ("nuevaeps",            "nueva_eps"),
+    ("nueva_eps",           "nueva_eps"),
+    ("preautorizacion",     "nueva_eps"),
+    ("preautor",            "nueva_eps"),
+]
+
+COLS_NUM: dict[str, list[str]] = {
+    "liberar_formula":   ["CantidadDireccionada", "CantidadEntregada", "Valor"],
+    "direccionamientos": ["pago_final", "porc_cobertura", "CantidadDosis", "Duracion"],
+    "consultar_cedula":  ["pago_final", "porc_cobertura", "CantidadDosis", "Duracion"],
+    "capital_salud":     ["CantidadMedicamento", "CuotaModeradora"],
+    "nueva_eps":         ["edad", "semanasCotizadas", "cantidad"],
+}
+
 NOMBRES_DISPLAY = {
-    "liberar_formula": "LiberarFormula (ST)",
+    "liberar_formula":   "LiberarFormula (ST)",
     "direccionamientos": "Direccionamientos (ST)",
-    "consultar_cedula": "ConsultarCedula (ST)",
-    "capital_salud": "Medicamentos (CS)",
-    "nueva_eps": "Preautorizaciones (NE)",
+    "consultar_cedula":  "ConsultarCedula (ST)",
+    "capital_salud":     "Medicamentos (CS)",
+    "nueva_eps":         "Preautorizaciones (NE)",
 }
 
 
@@ -40,58 +69,76 @@ def _limpiar_numericos(df: pd.DataFrame, columnas: list[str]) -> pd.DataFrame:
     return df
 
 
+def _clave_por_nombre(nombre_archivo: str) -> str | None:
+    """Devuelve la clave interna para un nombre de archivo aplicando PATRONES_NOMBRE."""
+    fname = nombre_archivo.lower().replace(" ", "_")
+    for patron, clave in PATRONES_NOMBRE:
+        if patron in fname:
+            return clave
+    return None
+
+
+def _cargar_archivo(ruta: Path) -> pd.DataFrame | None:
+    """Intenta cargar un CSV probando encodings y detectando separador."""
+    for enc in ("utf-8", "latin-1", "cp1252"):
+        try:
+            sep = _detectar_separador(ruta, enc)
+            df = pd.read_csv(ruta, encoding=enc, sep=sep,
+                             low_memory=False, dtype=str)
+            df.columns = df.columns.str.strip()
+            return df
+        except UnicodeDecodeError:
+            continue
+        except Exception:
+            break
+    return None
+
+
 def cargar_datos(ruta_datos: str) -> dict[str, pd.DataFrame]:
+    """
+    Carga todos los CSV de *ruta_datos* que coincidan con los patrones conocidos.
+
+    Estrategia de detección (en orden):
+    1. Nombres exactos definidos en ARCHIVOS (compatibilidad original).
+    2. Escaneo de todos los *.csv de la carpeta con PATRONES_NOMBRE.
+       Esto permite detectar archivos nuevos aunque el nombre cambie ligeramente.
+    """
     ruta_base = Path(ruta_datos)
     dfs: dict[str, pd.DataFrame] = {}
     errores: list[str] = []
 
+    # ── Paso 1: nombres exactos registrados ──────────────────────────────────
     for clave, archivo in ARCHIVOS.items():
         ruta = ruta_base / archivo
         if not ruta.exists():
             if clave not in ARCHIVOS_OPCIONALES:
                 errores.append(f"{archivo} no encontrado en {ruta_base}")
             continue
-
-        cargado = False
-        for enc in ("utf-8", "latin-1", "cp1252"):
-            try:
-                sep = _detectar_separador(ruta, enc)
-                df = pd.read_csv(
-                    ruta,
-                    encoding=enc,
-                    sep=sep,
-                    low_memory=False,
-                    dtype=str,
-                )
-                df.columns = df.columns.str.strip()
-                dfs[clave] = df
-                cargado = True
-                break
-            except UnicodeDecodeError:
-                continue
-            except Exception as e:
-                errores.append(f"{archivo}: {e}")
-                break
-
-        if not cargado and clave not in dfs and clave not in ARCHIVOS_OPCIONALES:
+        df = _cargar_archivo(ruta)
+        if df is not None:
+            dfs[clave] = df
+        elif clave not in ARCHIVOS_OPCIONALES:
             errores.append(f"No se pudo cargar {archivo}")
 
-    # Convertir columnas numéricas conocidas
-    cols_num_liberar = ["CantidadDireccionada", "CantidadEntregada", "Valor"]
-    cols_num_dir = ["pago_final", "porc_cobertura", "CantidadDosis", "Duracion"]
-    cols_num_cs = ["CantidadMedicamento", "CuotaModeradora"]
-    cols_num_ne = ["edad", "semanasCotizadas", "cantidad"]
+    # ── Paso 2: escaneo flexible de la carpeta ────────────────────────────────
+    # Detecta archivos nuevos o con nombres ligeramente distintos
+    csvs_en_carpeta = sorted(ruta_base.glob("*.csv")) + sorted(ruta_base.glob("*.CSV"))
+    nombres_ya_cargados = {Path(v).name.lower() for v in ARCHIVOS.values()}
 
-    if "liberar_formula" in dfs:
-        dfs["liberar_formula"] = _limpiar_numericos(dfs["liberar_formula"], cols_num_liberar)
-    if "direccionamientos" in dfs:
-        dfs["direccionamientos"] = _limpiar_numericos(dfs["direccionamientos"], cols_num_dir)
-    if "consultar_cedula" in dfs:
-        dfs["consultar_cedula"] = _limpiar_numericos(dfs["consultar_cedula"], cols_num_dir)
-    if "capital_salud" in dfs:
-        dfs["capital_salud"] = _limpiar_numericos(dfs["capital_salud"], cols_num_cs)
-    if "nueva_eps" in dfs:
-        dfs["nueva_eps"] = _limpiar_numericos(dfs["nueva_eps"], cols_num_ne)
+    for csv_path in csvs_en_carpeta:
+        if csv_path.name.lower() in nombres_ya_cargados:
+            continue  # ya fue procesado en el paso 1
+        clave = _clave_por_nombre(csv_path.name)
+        if clave is None or clave in dfs:
+            continue  # sin patrón coincidente o ya cargado
+        df = _cargar_archivo(csv_path)
+        if df is not None:
+            dfs[clave] = df
+
+    # ── Limpieza de columnas numéricas ────────────────────────────────────────
+    for clave, cols in COLS_NUM.items():
+        if clave in dfs:
+            dfs[clave] = _limpiar_numericos(dfs[clave], cols)
 
     if errores:
         raise RuntimeError("\n".join(errores))

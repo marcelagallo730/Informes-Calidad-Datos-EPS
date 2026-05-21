@@ -538,7 +538,8 @@ def _save_yaml(p: Path, data: dict):
 # ─────────────────────────────────────────────────────────────────────────────
 
 @st.cache_data(show_spinner=False)
-def _cargar(ruta: str) -> dict[str, pd.DataFrame]:
+def _cargar(ruta: str, cache_bust: int = 0) -> dict[str, pd.DataFrame]:
+    """cache_bust se incrementa con cada clic en Cargar/Recargar para forzar re-lectura."""
     return cargar_datos(ruta)
 
 def _pick_folder() -> str:
@@ -553,34 +554,12 @@ def _pick_folder() -> str:
     return folder or ""
 
 def _cargar_desde_uploads(archivos) -> dict[str, pd.DataFrame]:
-    """Load dataframes from st.file_uploader objects using flexible name matching."""
-    from src.loader import _limpiar_numericos  # reuse numeric cleaner
-
-    PATRONES = [
-        ("liberar",         "liberar_formula"),
-        ("formula",         "liberar_formula"),
-        ("direccion",       "direccionamientos"),
-        ("consultar",       "consultar_cedula"),
-        ("cedula",          "consultar_cedula"),
-        ("capital",         "capital_salud"),
-        ("medicamento",     "capital_salud"),
-        ("nuevaeps",        "nueva_eps"),
-        ("nueva_eps",       "nueva_eps"),
-        ("preautorizacion", "nueva_eps"),
-        ("preautor",        "nueva_eps"),
-    ]
-    COLS_NUM = {
-        "liberar_formula":   ["CantidadDireccionada", "CantidadEntregada", "Valor"],
-        "direccionamientos": ["pago_final", "CantidadDosis", "Duracion"],
-        "consultar_cedula":  ["pago_final", "CantidadDosis", "Duracion"],
-        "capital_salud":     ["CantidadMedicamento", "CuotaModeradora"],
-        "nueva_eps":         ["edad", "semanasCotizadas", "cantidad"],
-    }
+    """Carga DataFrames desde objetos st.file_uploader usando los patrones del loader."""
+    from src.loader import PATRONES_NOMBRE, COLS_NUM, _limpiar_numericos
 
     result: dict[str, pd.DataFrame] = {}
     for f in archivos:
-        fname = f.name.lower()
-        clave = next((k for p, k in PATRONES if p in fname), None)
+        clave = next((k for p, k in PATRONES_NOMBRE if p in f.name.lower()), None)
         if clave is None:
             continue
 
@@ -601,7 +580,7 @@ def _cargar_desde_uploads(archivos) -> dict[str, pd.DataFrame]:
         df.columns = df.columns.str.strip()
         df = _limpiar_numericos(df, COLS_NUM.get(clave, []))
         result[clave] = df
-        f.seek(0)  # reset pointer for potential re-reads
+        f.seek(0)
 
     return result
 
@@ -716,9 +695,8 @@ with st.sidebar:
 
         if st.button("⟳  Cargar / Recargar", type="primary", use_container_width=True,
                      key="btn_cargar_carpeta"):
-            st.cache_data.clear()
+            st.session_state["_cache_bust"] = st.session_state.get("_cache_bust", 0) + 1
             st.session_state.pop("dfs", None)
-            # no rerun needed — load block below runs immediately
 
     # ── Modo archivos CSV ────────────────────────────────────────────────────
     else:
@@ -754,7 +732,8 @@ with st.sidebar:
             try:
                 if modo == "📁  Carpeta":
                     ruta = st.session_state.get("ruta_seleccionada", RUTA_DATOS_DEFAULT)
-                    st.session_state.dfs = _cargar(ruta)
+                    bust = st.session_state.get("_cache_bust", 0)
+                    st.session_state.dfs = _cargar(ruta, cache_bust=bust)
                 else:
                     archivos_sel = st.session_state.get("csv_uploads") or []
                     if archivos_sel:
@@ -775,6 +754,15 @@ with st.sidebar:
             f'✓ {len(dfs_cargados)} archivo(s) · {n_total:,} registros</div>',
             unsafe_allow_html=True,
         )
+        # Lista de archivos detectados (igual que el modo upload)
+        for clave in dfs_cargados:
+            nombre = NOMBRES_DISPLAY.get(clave, clave)
+            n_filas = len(dfs_cargados[clave])
+            st.markdown(
+                f'<div style="font-size:11px;color:{TEXT2};padding:1px 0">'
+                f'📄 {nombre} · {n_filas:,} filas</div>',
+                unsafe_allow_html=True,
+            )
     elif st.session_state.get("dfs") is not None:
         st.warning("Sin datos. Selecciona una carpeta o archivos CSV válidos.")
 
