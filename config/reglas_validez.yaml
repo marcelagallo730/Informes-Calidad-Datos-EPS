@@ -1,0 +1,66 @@
+# Reglas de validez por archivo y columna.
+# tipos soportados: regex, dominio, numerico, fecha, fecha_yyyymmdd
+
+liberar_formula:
+  CUM:
+    tipo: regex
+    patron: '^\d{8}-\d{2}-'
+  Estado:
+    tipo: dominio
+    valores:
+      - Entregado
+      - Orden de Direccionamiento
+      - Direccionado con pendiente
+  CantidadDireccionada:
+    tipo: numerico
+    min: 0
+  CantidadEntregada:
+    tipo: numerico
+    min: 0
+  Valor:
+    tipo: numerico
+    min: 0
+
+direccionamientos:
+  DxPrincipal:
+    tipo: regex
+    patron: '^[A-Z]\d{2}'
+  TipoUsuario:
+    tipo: dominio
+    valores:
+      - Contributivo Cotizante
+      - Contributivo Beneficiario
+  ModContratacionPago:
+    tipo: dominio
+    valores:
+      - "Capitación"
+      - Evento
+  fecha_uso:
+    tipo: fecha
+  fecha_vto:
+    tipo: fecha
+  pago_final:
+    tipo: numerico
+    min: 0
+
+consultar_cedula:
+  DxPrincipal:
+    tipo: regex
+    patron: '^[A-Z]\d{2}'
+  fecha_uso:
+    tipo: fecha
+  fecha_vto:
+    tipo: fecha
+
+capital_salud:
+  IDDiagnostico:
+    tipo: regex
+    patron: '^[A-Z]\d{2}'
+  FechaProgramacionCita:
+    tipo: fecha_yyyymmdd
+  CantidadMedicamento:
+    tipo: numerico
+    min: 0
+  CuotaModeradora:
+    tipo: numerico
+    min: 0

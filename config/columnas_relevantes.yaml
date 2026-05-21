@@ -1,0 +1,28 @@
+capital_salud:
+- IDDiagnostico
+- FechaProgramacionCita
+- GlnPuntoAtencion
+consultar_cedula:
+- dociden
+- NumPrescripcion
+- codigoIT
+- IDDispensacion
+- NoEntrega
+- fecha_uso
+direccionamientos:
+- dociden
+- NumPrescripcion
+- codigoIT
+- nombreServicio
+- EstadoDireccionamientoMipres
+- NumEntregaMed
+- fecha_uso
+- fecha_vto
+liberar_formula:
+- CantidadDireccionada
+- CantidadEntregada
+- Estado
+- MotivoNoEntrega
+- CUM
+- CodigoServicio
+- Valor

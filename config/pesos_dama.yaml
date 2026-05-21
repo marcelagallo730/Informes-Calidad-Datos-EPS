@@ -1,0 +1,9 @@
+# Pesos para cada dimensión DAMA (deben sumar cualquier valor; se normalizan automáticamente)
+# Aumenta el peso de una dimensión para darle más importancia en el score final.
+Completitud: 1.5
+Unicidad: 1.0
+Validez: 1.5
+Exactitud: 1.5
+Oportunidad: 0.5
+Consistencia: 1.0
+Integridad: 1.0
