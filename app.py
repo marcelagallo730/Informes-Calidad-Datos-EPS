@@ -705,14 +705,8 @@ with st.sidebar:
             type=["csv"],
             accept_multiple_files=True,
             key="csv_uploads",
-            help="Selecciona uno o más CSV (LiberarFormula, Direccionamientos, ConsultarCedula, CapitalSalud)",
+            help="Los archivos se agregan a los ya cargados sin borrar nada",
         )
-        # Detect when a new set of files is uploaded → force reload
-        ids_nuevos = tuple(f.file_id for f in (uploads or []))
-        if ids_nuevos != st.session_state.get("_upload_ids"):
-            st.session_state._upload_ids = ids_nuevos
-            st.session_state.pop("dfs", None)
-
         if uploads:
             for f in uploads:
                 st.markdown(
@@ -724,10 +718,13 @@ with st.sidebar:
 
         if st.button("⟳  Cargar archivos", type="primary", use_container_width=True,
                      key="btn_cargar_uploads", disabled=not uploads):
-            st.session_state.pop("dfs", None)
+            st.session_state["_merge_uploads"] = True   # merge, NO borrar dfs
 
     # ── Carga efectiva de datos ──────────────────────────────────────────────
+    _merge_uploads = st.session_state.pop("_merge_uploads", False)
+
     if "dfs" not in st.session_state:
+        # Primera carga o después de Cargar/Recargar en modo carpeta
         with st.spinner("Cargando datos…"):
             try:
                 if modo == "📁  Carpeta":
@@ -743,6 +740,21 @@ with st.sidebar:
             except Exception as exc:
                 st.error(str(exc))
                 st.session_state.dfs = {}
+
+    elif _merge_uploads:
+        # Agregar/actualizar archivos sin borrar los ya cargados
+        archivos_sel = st.session_state.get("csv_uploads") or []
+        if archivos_sel:
+            with st.spinner("Agregando archivos…"):
+                try:
+                    nuevos = _cargar_desde_uploads(archivos_sel)
+                    if nuevos:
+                        st.session_state.dfs = {**st.session_state.dfs, **nuevos}
+                        st.toast(f"✅ {len(nuevos)} archivo(s) agregado(s)/actualizados")
+                    else:
+                        st.warning("No se reconoció ningún archivo. Verifica los nombres.")
+                except Exception as exc:
+                    st.error(str(exc))
 
     # ── Estado de carga ──────────────────────────────────────────────────────
     dfs_cargados = st.session_state.get("dfs", {})

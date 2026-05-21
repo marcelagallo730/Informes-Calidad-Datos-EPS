@@ -2,63 +2,95 @@ import pandas as pd
 from pathlib import Path
 
 ARCHIVOS = {
-    "liberar_formula":    "SaludTotal_LiberarFormulaV2.csv",
-    "direccionamientos":  "SaludTotal_ConsultaDireccionamientosxCedula.csv",
-    "consultar_cedula":   "SaludTotal_ConsultarCedula.csv",
-    "capital_salud":      "CapitalSalud_ConsultaMedicamentos.csv",
-    "capital_salud_aut":  "CapitalSalud_ConsultarAutorizacion.csv",
-    "nueva_eps":          "NuevaEPS_ConsultaPreautorizacion.csv",
+    "liberar_formula":      "SaludTotal_LiberarFormulaV2.csv",
+    "direccionamientos":    "SaludTotal_ConsultaDireccionamientosxCedula.csv",
+    "consultar_cedula":     "SaludTotal_ConsultarCedula.csv",
+    "capital_salud":        "CapitalSalud_ConsultaMedicamentos.csv",
+    "capital_salud_aut":    "CapitalSalud_ConsultarAutorizacion.csv",
+    "nueva_eps":            "NuevaEPS_ConsultaPreautorizacion.csv",
+    "nueva_eps_afiliado":   "NuevaEPS_ConsultarAfiliado.csv",
+    "nueva_eps_ordenes":    "NuevaEPS_ConsultarOrdenes.csv",
+    "nueva_eps_liberar":    "NuevaEPS_LiberarPreautorizacion.csv",
 }
 
 # Archivos que no generan error si no están presentes en la carpeta
-ARCHIVOS_OPCIONALES = {"nueva_eps", "capital_salud_aut"}
+ARCHIVOS_OPCIONALES = {
+    "nueva_eps",
+    "capital_salud_aut",
+    "nueva_eps_afiliado",
+    "nueva_eps_ordenes",
+    "nueva_eps_liberar",
+}
 
-# Patrones de nombre (fragmento en minúsculas → clave interna).
-# ORDEN IMPORTA: patrones más específicos primero.
+# ── Patrones de nombre (fragmento en minúsculas → clave interna) ─────────────
+# ORDEN IMPORTA: los más específicos deben ir primero.
+# Regla general: patrones con prefijo "nuevaeps" van ANTES de los genéricos
+# ("liberar", "consultar", etc.) para evitar colisiones.
 PATRONES_NOMBRE: list[tuple[str, str]] = [
+
+    # ── NuevaEPS — específicos (ANTES que patrones genéricos) ────────────────
+    ("nuevaeps_liberarpreaut",      "nueva_eps_liberar"),
+    ("nuevaeps_liberar",            "nueva_eps_liberar"),
+    ("liberarpreautorizacion",      "nueva_eps_liberar"),
+    ("nuevaeps_consultarafil",      "nueva_eps_afiliado"),
+    ("consultarafiliado",           "nueva_eps_afiliado"),
+    ("afiliado",                    "nueva_eps_afiliado"),
+    ("nuevaeps_consultarord",       "nueva_eps_ordenes"),
+    ("consultarordenes",            "nueva_eps_ordenes"),
+    ("ordenes",                     "nueva_eps_ordenes"),
+    ("nuevaeps_consultapreaut",     "nueva_eps"),
+    ("nuevaeps_preaut",             "nueva_eps"),
+    ("preautorizacion",             "nueva_eps"),
+    ("preautor",                    "nueva_eps"),
+    ("nuevaeps",                    "nueva_eps"),
+    ("nueva_eps",                   "nueva_eps"),
+
     # ── Salud Total ──────────────────────────────────────────────────────────
-    ("liberarformula",          "liberar_formula"),
-    ("liberar_formula",         "liberar_formula"),
-    ("liberarformulav",         "liberar_formula"),
-    ("liberar",                 "liberar_formula"),
-    ("formula",                 "liberar_formula"),
-    ("direccionamientos",       "direccionamientos"),
-    ("direccionamiento",        "direccionamientos"),
-    ("direccion",               "direccionamientos"),
-    ("consultarcedula",         "consultar_cedula"),
-    ("consultarced",            "consultar_cedula"),
+    ("liberarformulav",             "liberar_formula"),
+    ("liberar_formula",             "liberar_formula"),
+    ("liberarformula",              "liberar_formula"),
+    ("liberar",                     "liberar_formula"),   # genérico — va DESPUÉS de NuevaEPS
+    ("formula",                     "liberar_formula"),
+    ("direccionamientos",           "direccionamientos"),
+    ("direccionamiento",            "direccionamientos"),
+    ("direccion",                   "direccionamientos"),
+    ("consultarcedula",             "consultar_cedula"),
+    ("consultarced",                "consultar_cedula"),
+
     # ── Capital Salud ────────────────────────────────────────────────────────
-    ("consultarautorizacion",   "capital_salud_aut"),   # más específico primero
-    ("consultaraut",            "capital_salud_aut"),
-    ("autorizacion",            "capital_salud_aut"),
-    ("capitalsalud_consultar",  "capital_salud_aut"),
-    ("consultamedicamentos",    "capital_salud"),
-    ("capitalsalud",            "capital_salud"),
-    ("capital",                 "capital_salud"),
-    ("medicamento",             "capital_salud"),
-    # ── Nueva EPS ────────────────────────────────────────────────────────────
-    ("nuevaeps",                "nueva_eps"),
-    ("nueva_eps",               "nueva_eps"),
-    ("preautorizacion",         "nueva_eps"),
-    ("preautor",                "nueva_eps"),
+    ("consultarautorizacion",       "capital_salud_aut"),
+    ("consultaraut",                "capital_salud_aut"),
+    ("autorizacion",                "capital_salud_aut"),
+    ("capitalsalud_consultar",      "capital_salud_aut"),
+    ("consultamedicamentos",        "capital_salud"),
+    ("capitalsalud",                "capital_salud"),
+    ("capital",                     "capital_salud"),
+    ("medicamento",                 "capital_salud"),
 ]
 
 COLS_NUM: dict[str, list[str]] = {
-    "liberar_formula":   ["CantidadDireccionada", "CantidadEntregada", "Valor"],
-    "direccionamientos": ["pago_final", "porc_cobertura", "CantidadDosis", "Duracion"],
-    "consultar_cedula":  ["pago_final", "porc_cobertura", "CantidadDosis", "Duracion"],
-    "capital_salud":     ["CantidadMedicamento", "CuotaModeradora"],
-    "capital_salud_aut": ["cantTotAEntregar", "cantTotEntregada", "cuotaModeradora", "copagoAuto"],
-    "nueva_eps":         ["edad", "semanasCotizadas", "cantidad"],
+    "liberar_formula":    ["CantidadDireccionada", "CantidadEntregada", "Valor"],
+    "direccionamientos":  ["pago_final", "porc_cobertura", "CantidadDosis", "Duracion"],
+    "consultar_cedula":   ["pago_final", "porc_cobertura", "CantidadDosis", "Duracion"],
+    "capital_salud":      ["CantidadMedicamento", "CuotaModeradora"],
+    "capital_salud_aut":  ["cantTotAEntregar", "cantTotEntregada", "cuotaModeradora", "copagoAuto"],
+    "nueva_eps":          ["edad", "semanasCotizadas", "cantidad"],
+    "nueva_eps_afiliado": ["edad", "semanasCotizadas"],
+    "nueva_eps_ordenes":  ["edad", "valor_orden", "cant_presentacion", "cantidad_dispensada",
+                           "dias_tratamiento", "nro_dosis"],
+    "nueva_eps_liberar":  ["edad", "semanasCotizadas", "cantidad"],
 }
 
 NOMBRES_DISPLAY = {
-    "liberar_formula":   "LiberarFormula (ST)",
-    "direccionamientos": "Direccionamientos (ST)",
-    "consultar_cedula":  "ConsultarCedula (ST)",
-    "capital_salud":     "Medicamentos (CS)",
-    "capital_salud_aut": "Autorizaciones (CS)",
-    "nueva_eps":         "Preautorizaciones (NE)",
+    "liberar_formula":    "LiberarFormula (ST)",
+    "direccionamientos":  "Direccionamientos (ST)",
+    "consultar_cedula":   "ConsultarCedula (ST)",
+    "capital_salud":      "Medicamentos (CS)",
+    "capital_salud_aut":  "Autorizaciones (CS)",
+    "nueva_eps":          "Preautorizaciones (NE)",
+    "nueva_eps_afiliado": "Afiliados (NE)",
+    "nueva_eps_ordenes":  "Ordenes (NE)",
+    "nueva_eps_liberar":  "LiberarPreaut (NE)",
 }
 
 
@@ -97,7 +129,7 @@ def _cargar_archivo(ruta: Path) -> pd.DataFrame | None:
             sep = _detectar_separador(ruta, enc)
             df = pd.read_csv(ruta, encoding=enc, sep=sep,
                              low_memory=False, dtype=str)
-            df.columns = df.columns.str.strip()
+            df.columns = df.columns.str.strip().str.lstrip("﻿").str.strip('"')
             return df
         except UnicodeDecodeError:
             continue
@@ -120,7 +152,7 @@ def cargar_datos(ruta_datos: str) -> dict[str, pd.DataFrame]:
     errores: list[str] = []
 
     # ── Paso 1: nombres exactos registrados ──────────────────────────────────
-    nombres_exactos_lower = {v.lower(): (k, v) for k, v in ARCHIVOS.items()}
+    nombres_exactos_lower = {v.lower() for v in ARCHIVOS.values()}
     for clave, archivo in ARCHIVOS.items():
         ruta = ruta_base / archivo
         if not ruta.exists():
