@@ -6,13 +6,18 @@ ARCHIVOS = {
     "direccionamientos": "SaludTotal_ConsultaDireccionamientosxCedula.csv",
     "consultar_cedula": "SaludTotal_ConsultarCedula.csv",
     "capital_salud": "CapitalSalud_ConsultaMedicamentos.csv",
+    "nueva_eps": "NuevaEPS_ConsultaPreautorizacion.csv",
 }
+
+# Archivos que no generan error si no están presentes en la carpeta
+ARCHIVOS_OPCIONALES = {"nueva_eps"}
 
 NOMBRES_DISPLAY = {
     "liberar_formula": "LiberarFormula (ST)",
     "direccionamientos": "Direccionamientos (ST)",
     "consultar_cedula": "ConsultarCedula (ST)",
     "capital_salud": "Medicamentos (CS)",
+    "nueva_eps": "Preautorizaciones (NE)",
 }
 
 
@@ -43,7 +48,8 @@ def cargar_datos(ruta_datos: str) -> dict[str, pd.DataFrame]:
     for clave, archivo in ARCHIVOS.items():
         ruta = ruta_base / archivo
         if not ruta.exists():
-            errores.append(f"{archivo} no encontrado en {ruta_base}")
+            if clave not in ARCHIVOS_OPCIONALES:
+                errores.append(f"{archivo} no encontrado en {ruta_base}")
             continue
 
         cargado = False
@@ -67,13 +73,14 @@ def cargar_datos(ruta_datos: str) -> dict[str, pd.DataFrame]:
                 errores.append(f"{archivo}: {e}")
                 break
 
-        if not cargado and clave not in dfs:
+        if not cargado and clave not in dfs and clave not in ARCHIVOS_OPCIONALES:
             errores.append(f"No se pudo cargar {archivo}")
 
     # Convertir columnas numéricas conocidas
     cols_num_liberar = ["CantidadDireccionada", "CantidadEntregada", "Valor"]
     cols_num_dir = ["pago_final", "porc_cobertura", "CantidadDosis", "Duracion"]
     cols_num_cs = ["CantidadMedicamento", "CuotaModeradora"]
+    cols_num_ne = ["edad", "semanasCotizadas", "cantidad"]
 
     if "liberar_formula" in dfs:
         dfs["liberar_formula"] = _limpiar_numericos(dfs["liberar_formula"], cols_num_liberar)
@@ -83,6 +90,8 @@ def cargar_datos(ruta_datos: str) -> dict[str, pd.DataFrame]:
         dfs["consultar_cedula"] = _limpiar_numericos(dfs["consultar_cedula"], cols_num_dir)
     if "capital_salud" in dfs:
         dfs["capital_salud"] = _limpiar_numericos(dfs["capital_salud"], cols_num_cs)
+    if "nueva_eps" in dfs:
+        dfs["nueva_eps"] = _limpiar_numericos(dfs["nueva_eps"], cols_num_ne)
 
     if errores:
         raise RuntimeError("\n".join(errores))

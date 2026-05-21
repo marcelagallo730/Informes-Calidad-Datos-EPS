@@ -557,19 +557,24 @@ def _cargar_desde_uploads(archivos) -> dict[str, pd.DataFrame]:
     from src.loader import _limpiar_numericos  # reuse numeric cleaner
 
     PATRONES = [
-        ("liberar",       "liberar_formula"),
-        ("formula",       "liberar_formula"),
-        ("direccion",     "direccionamientos"),
-        ("consultar",     "consultar_cedula"),
-        ("cedula",        "consultar_cedula"),
-        ("capital",       "capital_salud"),
-        ("medicamento",   "capital_salud"),
+        ("liberar",         "liberar_formula"),
+        ("formula",         "liberar_formula"),
+        ("direccion",       "direccionamientos"),
+        ("consultar",       "consultar_cedula"),
+        ("cedula",          "consultar_cedula"),
+        ("capital",         "capital_salud"),
+        ("medicamento",     "capital_salud"),
+        ("nuevaeps",        "nueva_eps"),
+        ("nueva_eps",       "nueva_eps"),
+        ("preautorizacion", "nueva_eps"),
+        ("preautor",        "nueva_eps"),
     ]
     COLS_NUM = {
-        "liberar_formula":  ["CantidadDireccionada", "CantidadEntregada", "Valor"],
+        "liberar_formula":   ["CantidadDireccionada", "CantidadEntregada", "Valor"],
         "direccionamientos": ["pago_final", "CantidadDosis", "Duracion"],
         "consultar_cedula":  ["pago_final", "CantidadDosis", "Duracion"],
         "capital_salud":     ["CantidadMedicamento", "CuotaModeradora"],
+        "nueva_eps":         ["edad", "semanasCotizadas", "cantidad"],
     }
 
     result: dict[str, pd.DataFrame] = {}
